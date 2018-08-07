@@ -1,59 +1,18 @@
-<!DOCTYPE html>
-<html>
-
-<body>
-
-<div id="ferret"></div>
-
-<style>
-
-#ferret{
-	position:fixed;
-	left:0;
-	right:0;
-	top:0;
-	bottom:0;
-	background-color:yellow;
-}
-
-.ferret-item{
-	width:10rem;
-	height:10rem;
-	position:absolute;
-	background-color:blue;
-	border-radius:50%;
-	box-sizing:border-box;
-	border:5px solid black;
-	
-	transition:left .1s, top .1s;
-	
-	/*Center the item*/
-	transform:translate(-50%,-50%);
-	user-select:none;
-}
-
-.ferret-item-target{
-	background-color:red;
-	pointer-events:none;
-}
-
-</style>
-
-<script>
-
-
 function Ferret(input={}){
 	const F=this;
 	
-	var buttons=100;
+	F.window=input.window;
+	F.buttons=input.buttons;
 	
 	var shuffling=false;
 	var target=null;
 	
-	input.window.addEventListener('mousedown',function(event){
+	//Event listeners
+	F.window.addEventListener('mousedown',function(event){
 		shuffling=true;
 	});
-	input.window.addEventListener('mouseup',function(event){
+	
+	F.window.addEventListener('mouseup',function(event){
 		shuffling=false;
 		
 		if(target!==null){
@@ -61,7 +20,8 @@ function Ferret(input={}){
 			target=null;
 		}
 	});
-	input.window.addEventListener('mousemove',function(event){
+	
+	F.window.addEventListener('mousemove',function(event){
 		//Move the held button
 		if(target!==null){
 			target.style.left=event.clientX+'px';
@@ -69,7 +29,33 @@ function Ferret(input={}){
 		}
 	});
 	
-	for(var i=1;i<=buttons;i++){
+	F.window.addEventListener('mousedown',function(event){
+		shuffling=true;
+	});
+	
+	//Input
+	var search=document.createElement('input');
+	search.className='ferret-search';
+	search.style.zIndex=F.buttons.length;
+	search.placeholder='Search';
+	
+	search.addEventListener('input',function(e){
+		console.log(this.value);
+		
+		//Hide buttons that don't match
+		for(let i=0;i<F.buttons.length;i++){
+			if(new RegExp('(^|,)'+this.value,'i').test(F.buttons[i].tags)){
+				F.buttons[i].element.classList.remove('ferret-item-hide');
+			}else{
+				F.buttons[i].element.classList.add('ferret-item-hide');
+			}
+		}
+	});
+	
+	F.window.appendChild(search);
+	
+	//Create buttons
+	for(var i=0;i<F.buttons.length;i++){
 		let button=document.createElement('div');
 		button.className='ferret-item';
 		
@@ -85,7 +71,7 @@ function Ferret(input={}){
 			
 			//Move this element to the top, and all the others down a step
 			var initialZ=this.style.zIndex;
-			this.style.zIndex=buttons;
+			this.style.zIndex=F.buttons.length-1;
 			
 			document.querySelectorAll('.ferret-item').forEach(function(element){
 				console.log(element,element.style.zIndex,initialZ);
@@ -111,7 +97,7 @@ function Ferret(input={}){
 			var zIndex=parseInt(this.style.zIndex);
 		
 			//Pointer properties
-			var windowSize=input.window.getBoundingClientRect();
+			var windowSize=F.window.getBoundingClientRect();
 			
 			var leftPointer=event.clientX;
 			var topPointer=event.clientY;
@@ -130,7 +116,7 @@ function Ferret(input={}){
 			
 			//console.log(calc.left,leftPointer,calc.top,topPointer);
 			
-			var speed=((maxSpeed-minSpeed)*(zIndex/buttons))+minSpeed;
+			var speed=((maxSpeed-minSpeed)*(zIndex/(F.buttons.length-1)))+minSpeed;
 			
 			var newLeft=(calc.left-(fromLeft*speed)+radius);
 			var newTop=(calc.top-(fromTop*speed)+radius);
@@ -146,18 +132,17 @@ function Ferret(input={}){
 			this.style.top=newTop+'px';
 		});
 		
-		input.window.appendChild(button);
+		F.window.appendChild(button);
 		let buttonCalc=button.getBoundingClientRect();
 		button.style.left=(buttonCalc.left+buttonCalc.width/2)+'px';
 		button.style.top=(buttonCalc.top+buttonCalc.width/2)+'px';
+		
+		//Add values passed through
+		button.innerHTML=F.buttons[i].content;
+		if(F.buttons[i].classes) button.className+=' '+F.buttons[i].classes;
+		if(F.buttons[i].css) button.style.cssText+=F.buttons[i].css;
+		
+		//Save button element in object
+		F.buttons[i].element=button;
 	}
 }
-
-new Ferret({
-	window:document.getElementById('ferret')
-});
-
-</script>
-
-</body>
-</html>

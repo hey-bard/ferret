@@ -1,0 +1,37 @@
+.ferret-search{
+	position:fixed;
+	top:0;
+	width:100%;
+	display:block;
+	left:0;
+}
+
+.ferret-item{
+	width:10rem;
+	height:10rem;
+	position:absolute;
+	background-color:#fff;
+	border-radius:50%;
+	box-sizing:border-box;
+	border:5px solid black;
+	
+	transition:left .1s, top .1s;
+	
+	/*Center the item*/
+	transform:translate(-50%,-50%) scale(1,1);
+	user-select:none;
+	
+	/*Center the content*/
+	display:flex;
+	justify-content:center;
+	align-items:center;
+}
+
+.ferret-item-target{
+	pointer-events:none;
+}
+
+.ferret-item-hide{
+	opacity:.1;
+	pointer-events:none;
+}
