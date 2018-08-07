@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+<div id="ferret"></div>
+
+<style>
+
+#ferret{
+	position:fixed;
+	left:0;
+	right:0;
+	top:0;
+	bottom:0;
+	background-color:yellow;
+}
+
+.ferret-item{
+	width:10rem;
+	height:10rem;
+	position:absolute;
+	background-color:blue;
+	border-radius:50%;
+	box-sizing:border-box;
+	border:5px solid black;
+	
+	transition:left .1s, top .1s;
+	
+	/*Center the item*/
+	transform:translate(-50%,-50%);
+	user-select:none;
+}
+
+.ferret-item-target{
+	background-color:red;
+	pointer-events:none;
+}
+
+</style>
+
+<script>
+
+
+function Ferret(input={}){
+	const F=this;
+	
+	var buttons=100;
+	
+	var shuffling=false;
+	var target=null;
+	
+	input.window.addEventListener('mousedown',function(event){
+		shuffling=true;
+	});
+	input.window.addEventListener('mouseup',function(event){
+		shuffling=false;
+		
+		if(target!==null){
+			target.classList.remove('ferret-item-target');
+			target=null;
+		}
+	});
+	input.window.addEventListener('mousemove',function(event){
+		//Move the held button
+		if(target!==null){
+			target.style.left=event.clientX+'px';
+			target.style.top=event.clientY+'px';;
+		}
+	});
+	
+	for(var i=1;i<=buttons;i++){
+		let button=document.createElement('div');
+		button.className='ferret-item';
+		
+		//button.style.transform='translate('+Math.random()*100+'%,'+Math.random()*100+'%)';
+		//Set button position
+		button.style.left=Math.random()*100+'%';
+		button.style.top=Math.random()*100+'%';
+		button.style.zIndex=i;
+		
+		button.addEventListener('mousedown',function(event){
+			target=this;
+			this.classList.add('ferret-item-target');
+			
+			//Move this element to the top, and all the others down a step
+			var initialZ=this.style.zIndex;
+			this.style.zIndex=buttons;
+			
+			document.querySelectorAll('.ferret-item').forEach(function(element){
+				console.log(element,element.style.zIndex,initialZ);
+			
+				//Don't do it for this button!
+				if(
+					element!==target
+					&& parseInt(element.style.zIndex)>parseInt(initialZ)
+				) element.style.zIndex--;
+				
+			});
+		});
+		
+		button.addEventListener('mousemove',function(event){
+			//We move held buttons in mousemove for the whole window
+			if(!shuffling || target===this) return;
+		
+			//Positions are calculated by pixels
+		
+			//Element properties
+			var calc=this.getBoundingClientRect();
+			var radius=calc.width/2;
+			var zIndex=parseInt(this.style.zIndex);
+		
+			//Pointer properties
+			var windowSize=input.window.getBoundingClientRect();
+			
+			var leftPointer=event.clientX;
+			var topPointer=event.clientY;
+			
+			//Adjust way buttons respond on each mousemove
+			var maxSpeed=24;
+			var minSpeed=15;
+		
+			//console.log(leftPointer,topPointer);
+			
+			//Distance from the center
+			var fromLeft=((leftPointer-(calc.left+radius)))/radius;
+			var fromTop=((topPointer-(calc.top+radius)))/radius;
+			
+			console.log(fromLeft,fromTop);
+			
+			//console.log(calc.left,leftPointer,calc.top,topPointer);
+			
+			var speed=((maxSpeed-minSpeed)*(zIndex/buttons))+minSpeed;
+			
+			var newLeft=(calc.left-(fromLeft*speed)+radius);
+			var newTop=(calc.top-(fromTop*speed)+radius);
+			
+			//Don't let go outside of boundaries
+			if(newLeft<radius) newLeft=radius;
+			if(newLeft>windowSize.width-radius) newLeft=windowSize.width-radius;
+			
+			if(newTop<radius) newTop=radius;
+			if(newTop>windowSize.height-radius) newTop=windowSize.height-radius;
+			
+			this.style.left=newLeft+'px';
+			this.style.top=newTop+'px';
+		});
+		
+		input.window.appendChild(button);
+		let buttonCalc=button.getBoundingClientRect();
+		button.style.left=(buttonCalc.left+buttonCalc.width/2)+'px';
+		button.style.top=(buttonCalc.top+buttonCalc.width/2)+'px';
+	}
+}
+
+new Ferret({
+	window:document.getElementById('ferret')
+});
+
+</script>
+
+</body>
+</html>
