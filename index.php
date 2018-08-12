@@ -26,7 +26,7 @@ var localFerret=new Ferret({
 		#Make a bunch of buttons for the sake of testing
 		$buttons=[];
 		
-		for($i=0;$i<10;$i++){
+		for($i=0;$i<30;$i++){
 			$buttons[$i]=[
 				'content'=>'Test '.$i
 				,'classes'=>null

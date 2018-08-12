@@ -14,6 +14,9 @@ function Ferret(input={}){
 	var maxSpeed=100000000/(1000-frameGap); //If the user sweeps from one corner of the screen to the other
 	var minSpeed=7500/(1000-frameGap);
 	
+	//How small a button can get when in the back
+	var minSize=.4;
+	
 	var mouseData={
 		x:null
 		,y:null
@@ -184,15 +187,20 @@ function Ferret(input={}){
 		let button=document.createElement('a');
 		button.className='ferret-item';
 		
-		//Set button position
+		//Set button position based on percent
 		button.style.left=Math.random()*100+'%';
 		button.style.top=Math.random()*100+'%';
+		
 		button.style.zIndex=i;
+		var scale=(i/(F.buttons.length-1)*(1-minSize))+minSize;
+		button.style.transform='translate(-50%,-50%) scale('+scale+')';
 		
 		button.addEventListener('mousedown',buttonMouseDown);
 		button.addEventListener('click',buttonClick);
 		
 		F.window.appendChild(button);
+		
+		//Recalculate button position based on pixels
 		let buttonCalc=button.getBoundingClientRect();
 		button.style.left=(buttonCalc.left+buttonCalc.width/2)+'px';
 		button.style.top=(buttonCalc.top+buttonCalc.width/2)+'px';
@@ -218,13 +226,20 @@ function Ferret(input={}){
 		//Move this element to the top, and all the others down a step
 		var initialZ=this.style.zIndex;
 		this.style.zIndex=F.buttons.length-1;
+		this.style.transform='translate(-50%,-50%) scale(1)';
 		
 		document.querySelectorAll('.ferret-item').forEach(function(element){
 			//Don't do it for this button!
 			if(
 				element!==target
 				&& parseInt(element.style.zIndex)>parseInt(initialZ)
-			) element.style.zIndex--;
+			){
+				element.style.zIndex--;
+				
+				var scale=(((parseInt(element.style.zIndex)-1)/(F.buttons.length-1))*(1-minSize))+minSize;
+
+				element.style.transform='translate(-50%,-50%) scale('+scale+')';
+			}
 			
 		});
 	}
