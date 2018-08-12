@@ -7,13 +7,12 @@ function Ferret(input={}){
 	var shuffling=false;
 	var target=null;
 	
-	var frameGap=Math.floor(1000/10);
+	var frameGap=Math.floor(1000/(input.fps || 10));
 	var interval=window.setInterval(checkInterval,frameGap);
 	
 	//Adjust way buttons respond on each mousemove
 	var maxSpeed=100000000/(1000-frameGap); //If the user sweeps from one corner of the screen to the other
 	var minSpeed=7500/(1000-frameGap);
-	
 	
 	var mouseData={
 		x:null
@@ -119,10 +118,9 @@ function Ferret(input={}){
 	
 	//Event listeners
 	F.window.addEventListener('mousedown',function(event){
-		shuffling=true;
-		
 		mouseData.prevX=mouseData.x;
 		mouseData.prevY=mouseData.y;
+		shuffling='process';
 	});
 	
 	F.window.addEventListener('mouseup',function(event){
@@ -137,15 +135,29 @@ function Ferret(input={}){
 	});
 	
 	F.window.addEventListener('mousemove',function(event){
+		if(shuffling===false) return;
+		
+		console.log(shuffling);
+		
+		//Don't read this if we aren't shuffling
+		if(shuffling==='process'){
+			//If we didn't move much
+			if(Math.pow(event.clientX-mouseData.prevX,2)+Math.pow(event.clientY-mouseData.prevY,2)<windowCornerDistance/1000) return;
+			
+			console.log(Math.pow(event.clientX-mouseData.prevX,2)+Math.pow(event.clientY-mouseData.prevY,2));
+			
+			//Otherwise, continue
+			shuffling=true;
+			
+			if(target!==null) target.classList.add('ferret-item-target');
+		}
+		
+		
 		//Move the held button
 		if(target!==null){
 			target.style.left=event.clientX+'px';
 			target.style.top=event.clientY+'px';;
 		}
-	});
-	
-	F.window.addEventListener('mousedown',function(event){
-		shuffling=true;
 	});
 	
 	//Input
@@ -165,11 +177,11 @@ function Ferret(input={}){
 		}
 	});
 	
-	//F.window.appendChild(search);
+	F.window.appendChild(search);
 	
 	//Create buttons
 	for(var i=0;i<F.buttons.length;i++){
-		let button=document.createElement('div');
+		let button=document.createElement('a');
 		button.className='ferret-item';
 		
 		//Set button position
@@ -177,7 +189,8 @@ function Ferret(input={}){
 		button.style.top=Math.random()*100+'%';
 		button.style.zIndex=i;
 		
-		button.addEventListener('mousedown',buttonClick);
+		button.addEventListener('mousedown',buttonMouseDown);
+		button.addEventListener('click',buttonClick);
 		
 		F.window.appendChild(button);
 		let buttonCalc=button.getBoundingClientRect();
@@ -186,6 +199,7 @@ function Ferret(input={}){
 		
 		//Add values passed through
 		button.innerHTML=F.buttons[i].content;
+		button.href=F.buttons[i].action;
 		if(F.buttons[i].classes) button.className+=' '+F.buttons[i].classes;
 		if(F.buttons[i].css) button.style.cssText+=F.buttons[i].css;
 		
@@ -195,8 +209,11 @@ function Ferret(input={}){
 	
 	//Button functions
 	function buttonClick(event){
+		if(this.classList.contains('ferret-item-target')) event.preventDefault();
+	}
+	
+	function buttonMouseDown(event){
 		target=this;
-		this.classList.add('ferret-item-target');
 		
 		//Move this element to the top, and all the others down a step
 		var initialZ=this.style.zIndex;

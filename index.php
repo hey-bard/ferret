@@ -26,18 +26,20 @@ var localFerret=new Ferret({
 		#Make a bunch of buttons for the sake of testing
 		$buttons=[];
 		
-		for($i=0;$i<100;$i++){
+		for($i=0;$i<10;$i++){
 			$buttons[$i]=[
 				'content'=>'Test '.$i
 				,'classes'=>null
 				,'css'=>null
 				,'tags'=>$i
 				,'element'=>null
+				,'action'=>'https://heybard.com/'.$i
 			];
 		}
 	
 		echo json_encode($buttons);
 	?>
+	,fps:10
 });
 </script>
 
