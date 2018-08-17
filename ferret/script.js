@@ -49,8 +49,6 @@ function Ferret(input={}){
 			return;
 		}
 		
-		console.log(mouseData);
-		
 		//If the cursor's position hasn't changed
 		if(mouseData.x===mouseData.prevX && mouseData.y===mouseData.prevY) return;
 		
@@ -154,8 +152,6 @@ function Ferret(input={}){
 	
 	window.addEventListener('mousemove',function(event){
 		if(shuffling===false) return;
-		
-		console.log(shuffling);
 		
 		var crateSize=crate.getBoundingClientRect();
 		var crateCornerDistance=Math.pow(crateSize.width-0,2)+Math.pow(crateSize.height-0,2);

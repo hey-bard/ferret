@@ -38,7 +38,7 @@
 <div id="ferret"></div>
 
 <script>
-var localFerret=new Ferret({
+var settings={
 	window:document.getElementById('ferret')
 	,buttons:[
 		{
@@ -46,7 +46,6 @@ var localFerret=new Ferret({
 			,classes:null
 			,css:'background-image:url("resources/dhs.jpg")'
 			,tags:'hs,book,text'
-			,element:null
 			,action:'https://heybard.com/dream-high-school/'
 		}
 		,{
@@ -54,7 +53,6 @@ var localFerret=new Ferret({
 			,classes:null
 			,css:'background-image:url("resources/orbit.jpg")'
 			,tags:'crazy,comic'
-			,element:null
 			,action:'https://heybard.com/orbit/'
 		}
 		,{
@@ -62,7 +60,6 @@ var localFerret=new Ferret({
 			,classes:null
 			,css:'background-image:url("resources/bas.jpg")'
 			,tags:'dramatized,audio,sound'
-			,element:null
 			,action:'https://heybard.com/the-adventures-of-bob-and-susie/'
 		}
 		,{
@@ -70,13 +67,14 @@ var localFerret=new Ferret({
 			,classes:null
 			,css:'background-image:url("resources/entreprenewb.jpg")'
 			,tags:'comic,business'
-			,element:null
 			,action:'https://heybard.com/entreprenewb/'
 		}
 	]
 	,fps:10
 	,minSize:.9
-});
+};
+
+var localFerret=new Ferret(settings);
 </script>
 
 <h2>Install in 5 minutes!</h2>
@@ -98,10 +96,6 @@ new Ferret({
 &lt;/script&gt;
 
 <p id="propertyExplanation"></p></pre>
-
-<!--<h2>Used by:</h3>
-<div id="websites-using"><a href="http://gameplanmanga.com" target="_blank"><img src="images/gameplan-banner.jpg"></a></div>
-<p><small>Email me at <a href="mailto:joshuapowlison@gmail.com" target="_blank">joshuapowlison@gmail.com</a> if you want to be included in the list! I will not include NSFW stories.</small></p>-->
 
 <script src="script.js"></script>
 
