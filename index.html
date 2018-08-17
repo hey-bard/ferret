@@ -2,7 +2,7 @@
 <html>
 <head>
 	<title>Ferret Demo</title>
-	<meta name="description" content="A fun way to search through a bunch of items!">
+	<meta name="description" content="A fun way to find something new!">
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
@@ -22,72 +22,77 @@
 <header>
 	<nav>
 		<span><img class="svg-inline" src="design-files/logo.svg"></span>
-		<a href="https://github.com/joshpowlison/song"><p>Github</p></a>
-		<a href="https://github.com/joshpowlison/song/tree/develop"><p>Dev Branch</p></a>
+		<a href="https://github.com/joshpowlison/ferret"><p>Github</p></a>
+		<a href="https://github.com/joshpowlison/ferret/tree/develop"><p>Dev Branch</p></a>
 	</nav>
 </header>
 <main>
 
-<script src="https://platform.twitter.com/widgets.js"></script>
-<script src="song/script.js"></script>
-<link rel="stylesheet" href="song/styles.css">
+<script src="ferret/script.js"></script>
+<link rel="stylesheet" href="ferret/styles.css">
 
-<h1><img class="svg-inline" src="design-files/logo.svg"> Song</h1>
+<h1><img class="svg-inline" src="design-files/logo.svg"> Ferret</h1>
 
-<p id="intro">Make looking through your log for something new fun!</p>
-
-
-<style>
-#ferret{
-	position:fixed;
-	left:0;
-	right:0;
-	top:0;
-	bottom:0;
-	background-color:yellow;
-}
-</style>
+<p id="intro">A fun way to find something new!</p>
 
 <div id="ferret"></div>
 
 <script>
 var localFerret=new Ferret({
 	window:document.getElementById('ferret')
-	,buttons:<?php
-		#Make a bunch of buttons for the sake of testing
-		$buttons=[];
-		
-		for($i=0;$i<50;$i++){
-			$buttons[$i]=[
-				'content'=>'Test '.$i
-				,'classes'=>null
-				,'css'=>null
-				,'tags'=>$i
-				,'element'=>null
-				,'action'=>'https://heybard.com/'.$i
-			];
+	,buttons:[
+		{
+			content:'Dream High School'
+			,classes:null
+			,css:'background-image:url("resources/dhs.jpg")'
+			,tags:'hs,book,text'
+			,element:null
+			,action:'https://heybard.com/dream-high-school/'
 		}
-	
-		echo json_encode($buttons);
-	?>
+		,{
+			content:'Orbit'
+			,classes:null
+			,css:'background-image:url("resources/orbit.jpg")'
+			,tags:'crazy,comic'
+			,element:null
+			,action:'https://heybard.com/orbit/'
+		}
+		,{
+			content:'The Adventures of Bob and Susie'
+			,classes:null
+			,css:'background-image:url("resources/bas.jpg")'
+			,tags:'dramatized,audio,sound'
+			,element:null
+			,action:'https://heybard.com/the-adventures-of-bob-and-susie/'
+		}
+		,{
+			content:'Entreprenewb'
+			,classes:null
+			,css:'background-image:url("resources/entreprenewb.jpg")'
+			,tags:'comic,business'
+			,element:null
+			,action:'https://heybard.com/entreprenewb/'
+		}
+	]
 	,fps:10
+	,minSize:.9
 });
 </script>
 
 <h2>Install in 5 minutes!</h2>
 
-<p><a href="https://github.com/joshpowlison/song/releases" target="_blank">Download</a> and put the <em>song</em> folder on your website. Use this HTML:</p>
+<p><a href="https://github.com/joshpowlison/ferret/releases" target="_blank">Download</a> and put the <em>ferret</em> folder on your website. Use this HTML:</p>
 
 <pre>
-&lt;script src="song/script.js"&gt;&lt;/script&gt;
-&lt;script&gt;new Song;&lt;/script&gt;
+&lt;script src="ferret/script.js"&gt;&lt;/script&gt;
+&lt;script&gt;new Ferret;&lt;/script&gt;
 </pre>
 
-<p>To customize your Song, look at the code below!</p>
+<p>To customize your Ferret, look at the code below!</p>
 
 <pre>
 &lt;script&gt;
-new Song({
+new Ferret({
 <span id="code"></span>
 });
 &lt;/script&gt;
@@ -101,6 +106,6 @@ new Song({
 <script src="script.js"></script>
 
 </main>
-<footer><p>Continue is Open Source under an MIT License. Version in Demo: DEV BRANCH</p></footer>
+<footer><p>Ferret is Open Source under an MIT License. Version in Demo: DEV BRANCH</p></footer>
 </body>
 </html>

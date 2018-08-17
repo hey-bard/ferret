@@ -1,5 +1,5 @@
 .ferret-search{
-	position:fixed;
+	position:absolute;
 	top:0;
 	width:100%;
 	display:block;
@@ -13,18 +13,28 @@
 	bottom:0;
 	left:0;
 	display:block;
+	overflow:hidden;
 }
 
 .ferret-item{
 	width:10rem;
 	height:10rem;
 	position:absolute;
-	background-color:#fff;
+	
+	background-color:#503314;
+	background-size:cover;
+	
 	border-radius:50%;
 	box-sizing:border-box;
-	border:5px solid black;
+	box-shadow:0em 0em 1em rgba(0,0,0,.9);
 	
 	transition:left .1s, top .1s, transform .1s;
+	
+	/*Text design*/
+	color:white;
+	text-align:center;
+	font-size:1em;
+	text-decoration:none;
 	
 	/*Center the item*/
 	transform:translate(-50%,-50%) scale(1,1);

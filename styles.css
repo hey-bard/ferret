@@ -1,5 +1,5 @@
 /* COLORS
-Blue:		#1700ec
+Brown:		#503314
 Blackish:	#161d25
 */
 
@@ -16,7 +16,7 @@ body{
 header{
 	width:100%;
 	font-size:1.5em;
-	background-color:#1700ec;
+	background-color:#503314;
 	color:white;
 	font-weight:bold;
 	position:fixed;
@@ -34,7 +34,7 @@ nav{
 
 nav a
 ,nav span{
-	background-color:#1700ec;
+	background-color:#503314;
 	color:#fff;
 	height:4rem;
 	padding:0 1rem;
@@ -55,7 +55,7 @@ nav a:hover
 ,.show-selected
 ,.current{
 	background-color:#fff;
-	color:#1700ec;
+	color:#503314;
 }
 
 #nav-signature{
@@ -220,7 +220,7 @@ pre h3{
 footer{
 	width:100%;
 	margin:0;
-	background-color:#1700ec;
+	background-color:#503314;
 	color:white;
 	text-align:center;
 	font-size:.75em;
