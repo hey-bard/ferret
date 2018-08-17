@@ -2,7 +2,7 @@
 <html>
 <head>
 	<title>Ferret Demo</title>
-	<meta name="description" content="A fun way to find something new!">
+	<meta name="description" content="A fun way to search through a bunch of items!">
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
@@ -22,18 +22,31 @@
 <header>
 	<nav>
 		<span><img class="svg-inline" src="design-files/logo.svg"></span>
-		<a href="https://github.com/joshpowlison/ferret"><p>Github</p></a>
-		<a href="https://github.com/joshpowlison/ferret/tree/develop"><p>Dev Branch</p></a>
+		<a href="https://github.com/joshpowlison/song"><p>Github</p></a>
+		<a href="https://github.com/joshpowlison/song/tree/develop"><p>Dev Branch</p></a>
 	</nav>
 </header>
 <main>
 
-<script src="ferret/script.js"></script>
-<link rel="stylesheet" href="ferret/styles.css">
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script src="song/script.js"></script>
+<link rel="stylesheet" href="song/styles.css">
 
-<h1><img class="svg-inline" src="design-files/logo.svg"> Ferret</h1>
+<h1><img class="svg-inline" src="design-files/logo.svg"> Song</h1>
 
-<p id="intro">A fun way to find something new!</p>
+<p id="intro">Make looking through your log for something new fun!</p>
+
+
+<style>
+#ferret{
+	position:fixed;
+	left:0;
+	right:0;
+	top:0;
+	bottom:0;
+	background-color:yellow;
+}
+</style>
 
 <div id="ferret"></div>
 
@@ -44,7 +57,7 @@ var localFerret=new Ferret({
 		#Make a bunch of buttons for the sake of testing
 		$buttons=[];
 		
-		for($i=0;$i<20;$i++){
+		for($i=0;$i<50;$i++){
 			$buttons[$i]=[
 				'content'=>'Test '.$i
 				,'classes'=>null
@@ -63,18 +76,18 @@ var localFerret=new Ferret({
 
 <h2>Install in 5 minutes!</h2>
 
-<p><a href="https://github.com/joshpowlison/ferret/releases" target="_blank">Download</a> and put the <em>ferret</em> folder on your website. Use this HTML:</p>
+<p><a href="https://github.com/joshpowlison/song/releases" target="_blank">Download</a> and put the <em>song</em> folder on your website. Use this HTML:</p>
 
 <pre>
-&lt;script src="ferret/script.js"&gt;&lt;/script&gt;
-&lt;script&gt;new Ferret;&lt;/script&gt;
+&lt;script src="song/script.js"&gt;&lt;/script&gt;
+&lt;script&gt;new Song;&lt;/script&gt;
 </pre>
 
-<p>To customize your Ferret, look at the code below!</p>
+<p>To customize your Song, look at the code below!</p>
 
 <pre>
 &lt;script&gt;
-new Ferret({
+new Song({
 <span id="code"></span>
 });
 &lt;/script&gt;
@@ -88,6 +101,6 @@ new Ferret({
 <script src="script.js"></script>
 
 </main>
-<footer><p>Ferret is Open Source under an MIT License. Version in Demo: DEV BRANCH</p></footer>
+<footer><p>Continue is Open Source under an MIT License. Version in Demo: DEV BRANCH</p></footer>
 </body>
 </html>

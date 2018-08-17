@@ -1,3 +1,5 @@
+'use strict';
+
 function Ferret(input={}){
 	const F=this;
 	
@@ -26,11 +28,15 @@ function Ferret(input={}){
 	
 	window.addEventListener('resize',function(){
 		windowSize=F.window.getBoundingClientRect();
-		windowCornerDistance=Math.pow(windowSize.width-0,2)+Math.pow(windowSize.height-0,2);
 	});
 	
 	var windowSize=F.window.getBoundingClientRect();
-	var windowCornerDistance=Math.pow(windowSize.width-0,2)+Math.pow(windowSize.height-0,2);
+	
+	//Crate
+	var crate=document.createElement('div');
+	crate.className='ferret-crate';
+	F.window.appendChild(crate);
+	var crateSize=crate.getBoundingClientRect();
 	
 	function checkInterval(){
 		//If not shuffling
@@ -43,11 +49,16 @@ function Ferret(input={}){
 			return;
 		}
 		
+		console.log(mouseData);
+		
 		//If the cursor's position hasn't changed
 		if(mouseData.x===mouseData.prevX && mouseData.y===mouseData.prevY) return;
 		
 		var distance=Math.abs(((mouseData.x-mouseData.prevX)^2+(mouseData.y-mouseData.prevY)^2)^-1);
 		var radians=Math.atan2(mouseData.y-mouseData.prevY,mouseData.x-mouseData.prevX);
+		
+		var crateSize=crate.getBoundingClientRect();
+		var crateCornerDistance=Math.pow(crateSize.width-0,2)+Math.pow(crateSize.height-0,2);
 		
 		for(let i=0;i<F.buttons.length;i++){
 			///////Y OUTSIDE////////
@@ -88,7 +99,7 @@ function Ferret(input={}){
 						(maxSpeed-minSpeed)
 						*(zIndex/(F.buttons.length))
 					)
-					*(distance/windowCornerDistance)
+					*(distance/crateCornerDistance)
 					+minSpeed
 				;
 				
@@ -99,10 +110,10 @@ function Ferret(input={}){
 				
 				//Don't let go outside of boundaries
 				if(newLeft<radius) newLeft=radius;
-				if(newLeft>windowSize.width-radius) newLeft=windowSize.width-radius;
+				if(newLeft>crateSize.width-radius) newLeft=crateSize.width-radius;
 				
 				if(newTop<radius) newTop=radius;
-				if(newTop>windowSize.height-radius) newTop=windowSize.height-radius;
+				if(newTop>crateSize.height-radius) newTop=crateSize.height-radius;
 				
 				F.buttons[i].element.style.left=newLeft+'px';
 				F.buttons[i].element.style.top=newTop+'px';
@@ -114,19 +125,22 @@ function Ferret(input={}){
 		mouseData.prevY=mouseData.y;
 	};
 	
-	F.window.addEventListener('mousemove',function(event){
-		mouseData.x=event.clientX;
-		mouseData.y=event.clientY;
+	crate.addEventListener('mousemove',function(event){
+		var crateSize=crate.getBoundingClientRect();
+		
+		mouseData.x=event.clientX-crateSize.left;
+		mouseData.y=event.clientY-crateSize.top;
 	});
 	
 	//Event listeners
-	F.window.addEventListener('mousedown',function(event){
+	crate.addEventListener('mousedown',function(event){
 		mouseData.prevX=mouseData.x;
 		mouseData.prevY=mouseData.y;
 		shuffling='process';
 	});
 	
-	F.window.addEventListener('mouseup',function(event){
+	//These apply to the WHOLE window
+	window.addEventListener('mouseup',function(event){
 		shuffling=false;
 		mouseData.prevX=null;
 		mouseData.prevY=null;
@@ -137,17 +151,20 @@ function Ferret(input={}){
 		}
 	});
 	
-	F.window.addEventListener('mousemove',function(event){
+	window.addEventListener('mousemove',function(event){
 		if(shuffling===false) return;
 		
 		console.log(shuffling);
 		
+		var crateSize=crate.getBoundingClientRect();
+		var crateCornerDistance=Math.pow(crateSize.width-0,2)+Math.pow(crateSize.height-0,2);
+		
 		//Don't read this if we aren't shuffling
 		if(shuffling==='process'){
 			//If we didn't move much
-			if(Math.pow(event.clientX-mouseData.prevX,2)+Math.pow(event.clientY-mouseData.prevY,2)<windowCornerDistance/1000) return;
+			if(Math.pow(event.clientX-crateSize.left-mouseData.prevX,2)+Math.pow(event.clientY-crateSize.top-mouseData.prevY,2)<crateCornerDistance/1000) return;
 			
-			console.log(Math.pow(event.clientX-mouseData.prevX,2)+Math.pow(event.clientY-mouseData.prevY,2));
+			console.log(Math.pow(event.clientX-crateSize.left-mouseData.prevX,2)+Math.pow(event.clientY-crateSize.top-mouseData.prevY,2));
 			
 			//Otherwise, continue
 			shuffling=true;
@@ -158,8 +175,8 @@ function Ferret(input={}){
 		
 		//Move the held button
 		if(target!==null){
-			target.style.left=event.clientX+'px';
-			target.style.top=event.clientY+'px';;
+			target.style.left=event.clientX-crateSize.left+'px';
+			target.style.top=event.clientY-crateSize.top+'px';;
 		}
 	});
 	
@@ -198,12 +215,12 @@ function Ferret(input={}){
 		button.addEventListener('mousedown',buttonMouseDown);
 		button.addEventListener('click',buttonClick);
 		
-		F.window.appendChild(button);
+		crate.appendChild(button);
 		
 		//Recalculate button position based on pixels
 		let buttonCalc=button.getBoundingClientRect();
-		button.style.left=(buttonCalc.left+buttonCalc.width/2)+'px';
-		button.style.top=(buttonCalc.top+buttonCalc.width/2)+'px';
+		button.style.left=(buttonCalc.left-crateSize.left+buttonCalc.width/2)+'px';
+		button.style.top=(buttonCalc.top-crateSize.top+buttonCalc.width/2)+'px';
 		
 		//Add values passed through
 		button.innerHTML=F.buttons[i].content;

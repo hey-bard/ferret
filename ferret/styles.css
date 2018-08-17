@@ -6,7 +6,7 @@
 	left:0;
 }
 
-.ferret-bin{
+.ferret-crate{
 	position:absolute;
 	top:0;
 	right:0;
@@ -50,13 +50,4 @@
 .ferret-item-hide{
 	opacity:.1;
 	pointer-events:none;
-}
-
-.ferret-test{
-	background-color:red;
-	height:5px;
-	width:1px;
-	position:absolute;
-	transform-origin:0% 100%;
-	z-index:100;
 }
