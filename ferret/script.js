@@ -17,7 +17,7 @@ function Ferret(input={}){
 	var minSpeed=7500/(1000-frameGap);
 	
 	//How small a button can get when in the back
-	var minSize=.4;
+	var minSize=input.minSize || .4;
 	
 	var mouseData={
 		x:null
@@ -146,6 +146,7 @@ function Ferret(input={}){
 		mouseData.prevY=null;
 		
 		if(target!==null){
+			bringWithinBounds(target);
 			target.classList.remove('ferret-item-target');
 			target=null;
 		}
@@ -164,8 +165,6 @@ function Ferret(input={}){
 			//If we didn't move much
 			if(Math.pow(event.clientX-crateSize.left-mouseData.prevX,2)+Math.pow(event.clientY-crateSize.top-mouseData.prevY,2)<crateCornerDistance/1000) return;
 			
-			console.log(Math.pow(event.clientX-crateSize.left-mouseData.prevX,2)+Math.pow(event.clientY-crateSize.top-mouseData.prevY,2));
-			
 			//Otherwise, continue
 			shuffling=true;
 			
@@ -180,6 +179,24 @@ function Ferret(input={}){
 		}
 	});
 	
+	//Bring a button back within the boundaries of the crate
+	function bringWithinBounds(element){
+		var newLeft=parseInt(element.style.left);
+		var newTop=parseInt(element.style.top);
+		var radius=element.getBoundingClientRect().width/2;
+		var crateSize=crate.getBoundingClientRect();
+		
+		//Don't let go outside of boundaries
+		if(newLeft<radius) newLeft=radius;
+		if(newLeft>crateSize.width-radius) newLeft=crateSize.width-radius;
+		
+		if(newTop<radius) newTop=radius;
+		if(newTop>crateSize.height-radius) newTop=crateSize.height-radius;
+		
+		element.style.left=newLeft+'px';
+		element.style.top=newTop+'px';
+	}
+	
 	//Input
 	var search=document.createElement('input');
 	search.className='ferret-search';
@@ -189,7 +206,9 @@ function Ferret(input={}){
 	search.addEventListener('input',function(e){
 		//Hide buttons that don't match
 		for(let i=0;i<F.buttons.length;i++){
-			if(new RegExp('(^|,)'+this.value,'i').test(F.buttons[i].tags)){
+			var regex=new RegExp('(^|,)'+this.value,'i');
+			
+			if(regex.test(F.buttons[i].content) || regex.test(F.buttons[i].tags)){
 				F.buttons[i].element.classList.remove('ferret-item-hide');
 			}else{
 				F.buttons[i].element.classList.add('ferret-item-hide');
@@ -205,8 +224,8 @@ function Ferret(input={}){
 		button.className='ferret-item';
 		
 		//Set button position based on percent
-		button.style.left=Math.random()*100+'%';
-		button.style.top=Math.random()*100+'%';
+		//button.style.left=Math.random()*100+'%';
+		//button.style.top=Math.random()*100+'%';
 		
 		button.style.zIndex=i;
 		var scale=(i/(F.buttons.length-1)*(1-minSize))+minSize;
@@ -219,8 +238,10 @@ function Ferret(input={}){
 		
 		//Recalculate button position based on pixels
 		let buttonCalc=button.getBoundingClientRect();
-		button.style.left=(buttonCalc.left-crateSize.left+buttonCalc.width/2)+'px';
-		button.style.top=(buttonCalc.top-crateSize.top+buttonCalc.width/2)+'px';
+		button.style.left=Math.round(buttonCalc.width/2+(crateSize.width-buttonCalc.width)*Math.random())+'px';
+		button.style.top=Math.round(buttonCalc.height/2+(crateSize.height-buttonCalc.height)*Math.random())+'px';
+		/*button.style.left=(buttonCalc.left-crateSize.left+buttonCalc.width/2)+'px';
+		button.style.top=(buttonCalc.top-crateSize.top+buttonCalc.width/2)+'px';*/
 		
 		//Add values passed through
 		button.innerHTML=F.buttons[i].content;
