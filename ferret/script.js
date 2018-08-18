@@ -5,6 +5,7 @@ function Ferret(input={}){
 	
 	F.window=input.window;
 	F.buttons=input.buttons;
+	F.query=input.query || null;
 	
 	var shuffling=false;
 	var target=null;
@@ -212,6 +213,7 @@ function Ferret(input={}){
 		}
 	});
 	
+	
 	F.window.appendChild(search);
 	
 	//Create buttons
@@ -276,5 +278,42 @@ function Ferret(input={}){
 			}
 			
 		});
+	}
+	
+	//If querystring is enabled, add functions for it and get it from the URL
+	if(F.query){
+		var queryRegExp=new RegExp('([?|&]'+F.query+'=)([^&$]*)','i');
+		
+		getQuery();
+		search.addEventListener('change',updateQuery);
+	
+		function updateQuery(){
+			var newLocation;
+			
+			//Replace the querystring or add it in, depending on needs
+			if(queryRegExp.test(location.href)){
+				if(search.value==='') newLocation=location.href.replace(queryRegExp,'');
+				else newLocation=location.href.replace(queryRegExp,'$1'+search.value);
+			}else{
+				newLocation=location.href+(/\?/.test(location.href) ? '&' : '?')+F.query+'='+search.value;
+			}
+			
+			//Get query
+			history.pushState(
+				{}
+				,''
+				,newLocation
+			);
+		}
+		
+		function getQuery(){
+			var get=queryRegExp.exec(location.href);
+			if(get && get[2]) search.value=decodeURIComponent(get[2]);
+			else search.value='';
+			
+			search.dispatchEvent(new Event('input'));
+		}
+		
+		window.addEventListener('popstate',getQuery);
 	}
 }
