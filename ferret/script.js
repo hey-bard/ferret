@@ -4,8 +4,8 @@ function Ferret(input={}){
 	const F=this;
 	
 	F.window=input.window;
-	F.buttons=input.buttons;
 	F.query=input.query || null;
+	F.buttons=input.buttons || [];
 	
 	var shuffling=false;
 	var target=null;
@@ -219,17 +219,33 @@ function Ferret(input={}){
 	
 	F.window.appendChild(search);
 	
+	//Randomize the z-index array
+	//With help from https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+	var zIndexes=[];
+	for(var i=0;i<F.buttons.length;i++){
+		zIndexes[i]=i;
+	}
+	
+	var currentIndex=zIndexes.length;
+
+	// While there remain elements to shuffle...
+	while(0!==currentIndex){
+		// Pick a remaining element...
+		var randomIndex=Math.floor(Math.random()*currentIndex);
+		currentIndex-=1;
+
+		// And swap it with the current element.
+		[zIndexes[currentIndex],zIndexes[randomIndex]]=[zIndexes[randomIndex],zIndexes[currentIndex]];
+	}
+
 	//Create buttons
 	for(var i=0;i<F.buttons.length;i++){
 		let button=document.createElement('a');
 		button.className='ferret-item';
 		
-		//Set button position based on percent
-		//button.style.left=Math.random()*100+'%';
-		//button.style.top=Math.random()*100+'%';
+		button.style.zIndex=zIndexes[i];
 		
-		button.style.zIndex=i;
-		var scale=(i/(F.buttons.length-1)*(1-minSize))+minSize;
+		var scale=(((parseInt(button.style.zIndex)-1)/(F.buttons.length-1))*(1-minSize))+minSize;
 		button.style.transform='translate(-50%,-50%) scale('+scale+')';
 		
 		button.addEventListener('mousedown',buttonMouseDown);
