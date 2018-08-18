@@ -1,9 +1,10 @@
 .ferret-search{
 	position:absolute;
 	top:0;
+	left:0;
 	width:100%;
 	display:block;
-	left:0;
+	box-sizing:border-box;
 }
 
 .ferret-crate{
@@ -14,10 +15,13 @@
 	left:0;
 	display:block;
 	overflow:hidden;
+	
 	user-select:none;
 	-ms-user-select:none;
 	-moz-user-select:none;
 	-webkit-user-select:none;
+	
+	touch-action:none;
 }
 
 .ferret-item{
@@ -60,6 +64,7 @@
 
 .ferret-item-target{
 	pointer-events:none;
+	transition:none;
 }
 
 .ferret-item-hide{
