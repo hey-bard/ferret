@@ -60,6 +60,9 @@ function Ferret(input={}){
 		var crateCornerDistance=Math.pow(crateSize.width-0,2)+Math.pow(crateSize.height-0,2);
 		
 		for(let i=0;i<F.buttons.length;i++){
+			//Skip over the target
+			if(target && F.buttons[i].element===target) continue;
+			
 			///////Y OUTSIDE////////
 			
 			var x=parseFloat(F.buttons[i].element.style.left);
