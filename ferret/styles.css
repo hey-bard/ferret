@@ -31,10 +31,11 @@
 	transition:left .1s, top .1s, transform .1s;
 	
 	/*Text design*/
-	color:white;
+	color:#fff;
 	text-align:center;
 	font-size:1em;
 	text-decoration:none;
+	text-shadow:1px 1px 1px #000;
 	
 	/*Center the item*/
 	transform:translate(-50%,-50%) scale(1,1);
