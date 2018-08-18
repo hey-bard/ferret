@@ -124,7 +124,7 @@ function Ferret(input={}){
 		mouseData.prevY=mouseData.y;
 	};
 	
-	crate.addEventListener('mousemove',function(event){
+	window.addEventListener('mousemove',function(event){
 		var crateSize=crate.getBoundingClientRect();
 		
 		mouseData.x=event.clientX-crateSize.left;
